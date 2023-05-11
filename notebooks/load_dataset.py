@@ -87,6 +87,7 @@ class ColumnAndTableClassifierDataset(Dataset):
                         column_infos_in_one_table.append(column_name)
                 column_infos_in_one_db.append(column_infos_in_one_table)
             
+            # self.questions.append(data["norm_question"])
             self.questions.append(data["question"])
             
             self.all_table_names.append(table_names_in_one_db)
@@ -128,7 +129,7 @@ class Text2SQLDataset(Dataset):
             dataset = json.load(f)
         
         for data in dataset:
-            self.input_sequences.append(data["question"]) # input_sequence query_toks
+            self.input_sequences.append(data["norm_question"]) # input_sequence query_toks question
             self.db_ids.append(data["db_id"])
             self.all_tc_original.append(data["db_id"]) # tc_original
 
