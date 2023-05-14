@@ -123,25 +123,17 @@ class Text2SQLDataset(Dataset):
         self.output_sequences: list[str] = []
         self.db_ids: list[str] = []
         self.all_tc_original: list[list[str]] = []
-        self.modified_inputs: list[str] = []
-        self.sql_skeleton:list[str] = []
-        self.decoder_input: list[str] = []
-        self.db_schemas: list[str] = []
 
         with open(dir_, 'r', encoding = 'utf-8') as f:
             dataset = json.load(f)
         
         for data in dataset:
-            self.input_sequences.append(data["question"]) # input_sequence query_toks
+            self.input_sequences.append(data["input_sequence"])
             self.db_ids.append(data["db_id"])
-            self.all_tc_original.append(data["db_id"]) # tc_original
-            self.modified_inputs.append(self.createModifiedInputSequence(data["norm_question"], data["db_id"], data))
-            self.sql_skeleton.append(data["sql_skeleton"])
-            self.decoder_input.append(data["decoder_target"])
-            self.db_schemas.append(data["db_schema"])
+            self.all_tc_original.append(data["tc_original"])
 
             if self.mode == "train":
-                self.output_sequences.append(data["norm_sql"]) # output_sequence question_toks
+                self.output_sequences.append(data["output_sequence"])
             elif self.mode in ["eval", "test"]:
                 pass
             else:
@@ -152,25 +144,6 @@ class Text2SQLDataset(Dataset):
     
     def __getitem__(self, index):
         if self.mode == "train":
-            return self.modified_inputs[index], self.output_sequences[index], self.db_ids[index], self.all_tc_original[index], self.db_schemas, self.sql_skeleton, self.decoder_input
+            return self.input_sequences[index], self.output_sequences[index], self.db_ids[index], self.all_tc_original[index]
         elif self.mode in ['eval', "test"]:
-            return self.modified_inputs[index], self.db_ids[index], self.all_tc_original[index], self.db_schemas, self.sql_skeleton, self.decoder_input
-
-    def createModifiedInputSequence(self, normal_question, db_id, data):
-        delimiter = " | "
-
-        db_schema = self.get_dict(data["db_schema"])
-        # pk = self.get_dict(data["pk"])
-        # fk = self.get_dict(data["fk"])
-
-        return normal_question + delimiter + db_id + delimiter + " db_schema " + db_schema + delimiter #+ " pk " + pk + delimiter + " fk " + fk
-
-    def get_dict(self, dicti):
-        ans = ""
-        for d in dicti :
-            for key in d.keys() :
-                ans += f" {key} : {d[key]},"
-            ans = ans[:-1] + " : "
-
-        return ans[:-2]
-
+            return self.input_sequences[index], self.db_ids[index], self.all_tc_original[index]
