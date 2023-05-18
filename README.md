@@ -1,7 +1,5 @@
 # TextToSQL_AdvNLP
 
-# README
-
 Team Members: Aishwarya, Atharva, Dishank, Mrunal
 
 ### Install Dependencies
