@@ -362,12 +362,12 @@ def train(train_filepath, batch_size, bert_hidden_size, t5_hidden_size, lr, num_
 
 # Define hyperparameters
 
-train(train_filepath = "../data/resdsql_pre/preprocessed_dataset_train.json",
-      batch_size = 10, #32
+train(train_filepath ="../../data/resdsql_pre/preprocessed_dataset_train.json",
+      batch_size = 10,  #32
       bert_hidden_size = 768,
       t5_hidden_size = 512,
       lr = 1e-4,
-      num_epochs = 100, #300
+      num_epochs = 100,  #300
       max_input_length = 512,
       max_output_length = 512,
       bert_model = 'bert-base-uncased',

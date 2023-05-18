@@ -15,7 +15,7 @@ from transformers import T5TokenizerFast, T5ForConditionalGeneration
 from transformers import BertModel, T5ForConditionalGeneration, T5Tokenizer, BertTokenizer
 
 from notebooks.text2sql_decoding_utils import decode_sqls
-dev_filepath = "../data/resdsql_pre/preprocessed_dataset_test.json"
+dev_filepath = "../../data/resdsql_pre/preprocessed_dataset_test.json"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 device
@@ -389,12 +389,12 @@ def train(train_filepath, batch_size, bert_hidden_size, t5_hidden_size, lr, num_
 
 # Define hyperparameters
 
-train(train_filepath = "../data/resdsql_pre/preprocessed_dataset_train.json",
-      batch_size = 2, #32
+train(train_filepath ="../../data/resdsql_pre/preprocessed_dataset_train.json",
+      batch_size = 2,  #32
       bert_hidden_size = 768,
       t5_hidden_size = 512,
       lr = 1e-4,
-      num_epochs = 300, #300
+      num_epochs = 300,  #300
       max_input_length = 43,
       max_output_length = 127,
       bert_model = 'bert-base-uncased',
@@ -402,13 +402,14 @@ train(train_filepath = "../data/resdsql_pre/preprocessed_dataset_train.json",
 
 
 # Model class must be defined somewhere
-model_path = os.path.join(os.getcwd(), "models\\BERT_T5_lr0.0001_bs2_bert-base-uncased_t5-small_sql_skeleton_ncl\\model_280")
+model_path = os.path.join(os.getcwd(),
+                          "../models/BERT_T5_lr0.0001_bs2_bert-base-uncased_t5-small_sql_skeleton_ncl/model_280")
 
 model2 = torch.load(model_path, map_location=torch.device('cpu'))
 model2.eval()
 
 
-dev_filepath = "../data/resdsql_pre/preprocessed_dataset_test.json"
+dev_filepath = "../../data/resdsql_pre/preprocessed_dataset_test.json"
 batch_size = 1
 max_input_length = 43
 bert_model = 'bert-base-uncased'

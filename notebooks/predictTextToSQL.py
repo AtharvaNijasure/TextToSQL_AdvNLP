@@ -1,22 +1,11 @@
 import os
-import torch
-import json
-import numpy as np
-from tqdm import trange
 
 from load_dataset import Text2SQLDataset
 from torch.utils.data import DataLoader
 
+from transformers import T5Tokenizer, BertTokenizer
 
-import torch.nn as nn
-import torch.optim as optim
-from tokenizers import AddedToken
-from torch.utils.tensorboard import SummaryWriter
-from transformers import T5TokenizerFast, T5ForConditionalGeneration
-from transformers import BertModel, T5ForConditionalGeneration, T5Tokenizer, BertTokenizer
-
-from graph import *
-from RunGNN_T5_DecT5 import EncoderDecoder
+from notebooks.our_scripts.graph import *
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 dev_filepath = "../data/resdsql_pre/preprocessed_dataset_test.json"
