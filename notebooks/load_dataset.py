@@ -87,6 +87,7 @@ class ColumnAndTableClassifierDataset(Dataset):
                         column_infos_in_one_table.append(column_name)
                 column_infos_in_one_db.append(column_infos_in_one_table)
             
+            # self.questions.append(data["norm_question"])
             self.questions.append(data["question"])
             
             self.all_table_names.append(table_names_in_one_db)
@@ -132,7 +133,7 @@ class Text2SQLDataset(Dataset):
             dataset = json.load(f)
         
         for data in dataset:
-            self.input_sequences.append(data["question"]) # input_sequence query_toks
+            self.input_sequences.append(data["norm_question"]) # input_sequence query_toks question
             self.db_ids.append(data["db_id"])
             self.all_tc_original.append(data["db_id"]) # tc_original
             self.modified_inputs.append(self.createModifiedInputSequence(data["norm_question"], data["db_id"], data))
@@ -143,7 +144,61 @@ class Text2SQLDataset(Dataset):
             if self.mode == "train":
                 self.output_sequences.append(data["decoder_target"]) # output_sequence question_toks # norm_sql
             elif self.mode in ["eval", "test"]:
-                pass
+                self.output_sequences.append(data["norm_sql"]) # output_sequence question_toks
+                # pass
+            else:
+                raise ValueError("Invalid mode. Please choose from ``train``, ``eval`, and ``test``")
+    
+    def __len__(self):
+        return len(self.input_sequences)
+    
+    def __getitem__(self, index):
+        if self.mode == "train":
+            return self.input_sequences[index], self.output_sequences[index], self.db_ids[index], self.all_tc_original[index]
+        elif self.mode in ['eval', "test"]:
+            return self.input_sequences[index], self.db_ids[index], self.all_tc_original[index]
+
+class Text2SQLDataset_schema(Dataset):
+    def __init__(
+        self,
+        dir_: str,
+        schema_dir_: str,
+        mode: str
+    ):
+        super(Text2SQLDataset).__init__()
+        
+        self.mode = mode
+
+        self.input_sequences: list[str] = []
+        self.output_sequences: list[str] = []
+        self.db_ids: list[str] = []
+        self.all_tc_original: list[list[str]] = []
+
+        with open(dir_, 'r', encoding = 'utf-8') as f:
+            dataset = json.load(f)
+
+        with open(schema_dir_, 'r') as f:
+            schema_dataset = json.load(f)
+
+        print(f"Length of schema_dataset {len(schema_dataset)}")
+        
+        for data in dataset:
+            
+            if data['question'] not in schema_dataset.keys():
+                print(f"Key not found - {data['question']}")
+                continue
+
+            curr_input_schema = data["norm_question"] + " | " + schema_dataset[data['question']]
+
+            self.input_sequences.append(curr_input_schema) # input_sequence query_toks question
+            self.db_ids.append(data["db_id"])
+            self.all_tc_original.append(data["db_id"]) # tc_original
+
+            if self.mode == "train":
+                self.output_sequences.append(data["decoder_target"]) # output_sequence question_toks
+            elif self.mode in ["eval", "test"]:
+                self.output_sequences.append(data["decoder_target"]) # output_sequence question_toks
+                # pass
             else:
                 raise ValueError("Invalid mode. Please choose from ``train``, ``eval`, and ``test``")
     
