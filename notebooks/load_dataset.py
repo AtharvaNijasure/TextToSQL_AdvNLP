@@ -141,7 +141,7 @@ class Text2SQLDataset(Dataset):
             self.db_schemas.append(data["db_schema"])
 
             if self.mode == "train":
-                self.output_sequences.append(data["norm_sql"]) # output_sequence question_toks
+                self.output_sequences.append(data["decoder_target"]) # output_sequence question_toks # norm_sql
             elif self.mode in ["eval", "test"]:
                 pass
             else:
