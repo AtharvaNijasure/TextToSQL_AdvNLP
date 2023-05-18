@@ -1,3 +1,9 @@
+'''
+
+Sample GNN modules not used in report as we couldn't run them.
+
+'''
+
 import math
 
 import numpy as np

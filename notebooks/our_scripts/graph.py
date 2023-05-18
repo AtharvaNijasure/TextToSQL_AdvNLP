@@ -3,6 +3,11 @@ import dgl
 import torch
 import numpy as np
 
+
+'''
+Entire file made to create GNN but networks were not successful hence not using it.
+'''
+
 # Load T5 tokenizer and model
 tokenizer = transformers.T5Tokenizer.from_pretrained('t5-base')
 t5_model = transformers.T5Model.from_pretrained('t5-base')

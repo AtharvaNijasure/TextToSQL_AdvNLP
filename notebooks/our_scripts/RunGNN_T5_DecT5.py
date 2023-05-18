@@ -31,7 +31,10 @@ from transformers import T5TokenizerFast, T5ForConditionalGeneration
 from transformers import BertModel, T5ForConditionalGeneration, T5Tokenizer, BertTokenizer
 
 from graph import *
-
+'''
+GNN not implemented don't run
+lot of basic code is reused
+'''
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 device
 

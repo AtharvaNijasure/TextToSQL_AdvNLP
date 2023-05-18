@@ -1,3 +1,14 @@
+'''
+
+Code only for running seq2seq Bert to T5  for sql skeleton with no db schema as input
+To run this put this folder outside our scripts !!
+comment eval part in train to generate model
+comment train wile testing
+Remember to create a models folder to save check points.
+Code base taken from RESDSQL but modified a lot in various iterations
+Not giving good results hence avoided reporting in the report.
+
+'''
 import os
 import json
 import numpy as np
